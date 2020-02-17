@@ -39,7 +39,11 @@ class DAO {
 	public static $db;
 	public static $useTransformers = false;
 	public static $transformerOp = 'transform';
-	public static $daoInstance = self;
+	private static $daoInstance;
+
+	public static function getDAOInstance() {
+		return self::$daoInstance ??= new self ();
+	}
 	private static $conditionParsers = [ ];
 	protected static $modelsDatabase = [ ];
 
