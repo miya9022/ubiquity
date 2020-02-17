@@ -42,7 +42,10 @@ class DAO {
 	private static $daoInstance;
 
 	public static function getDAOInstance() {
-		return self::$daoInstance ??= new self ();
+		if (! isset ( self::$daoInstance )) {
+			self::$daoInstance = new DAO ();
+		}
+		return self::$daoInstance;
 	}
 	private static $conditionParsers = [ ];
 	protected static $modelsDatabase = [ ];
