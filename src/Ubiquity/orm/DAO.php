@@ -39,6 +39,7 @@ class DAO {
 	public static $db;
 	public static $useTransformers = false;
 	public static $transformerOp = 'transform';
+	public static $daoInstance = self;
 	private static $conditionParsers = [ ];
 	protected static $modelsDatabase = [ ];
 
@@ -163,7 +164,7 @@ class DAO {
 	 * @param array $options
 	 * @param boolean $cache
 	 */
-	public static function connect($offset, $wrapper, $dbType, $dbName, $serverName = '127.0.0.1', $port = '3306', $user = 'root', $password = '', $options = [], $cache = false) {
+	public static function connect($offset, $wrapper, $dbType, $dbName, $serverName = '127.0.0.1', $port = '3306', $user = 'root', $password = '', $options = [ ], $cache = false) {
 		self::$db [$offset] = new Database ( $wrapper, $dbType, $dbName, $serverName, $port, $user, $password, $options, $cache, self::$pool );
 		try {
 			self::$db [$offset]->connect ();
