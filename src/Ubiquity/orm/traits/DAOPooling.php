@@ -28,8 +28,9 @@ trait DAOPooling {
 	 * @param array $config
 	 * @param ?string $offset
 	 * @param int $size
+	 * @param callable $onDbStarted
 	 */
-	public static function initPooling(&$config, $offset = null, int $size = 16) {
+	public static function initPooling(&$config, $offset = null, int $size = 16, $onDbStarted = null) {
 		$dbConfig = self::getDbOffset ( $config, $offset );
 		$wrapperClass = $dbConfig ['wrapper'] ?? \Ubiquity\db\providers\pdo\PDOWrapper::class;
 		if (\method_exists ( $wrapperClass, 'getPoolClass' )) {
@@ -44,6 +45,9 @@ trait DAOPooling {
 			throw new DAOException ( $wrapperClass . ' does not support connection pooling!' );
 		}
 		self::startDatabase ( $config, $offset );
+		if (\is_callable ( $onDbStarted )) {
+			$onDbStarted ();
+		}
 	}
 
 	/**
