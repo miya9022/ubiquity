@@ -182,6 +182,6 @@ abstract class DAOPreparedQuery {
 		$this->firstPropKey = OrmUtils::getFirstPropKey ( $this->className );
 	}
 
-	abstract public function execute($params = [ ], $useCache = false);
+	abstract public function execute($params = [ ], $useCache = false, $dbInstance = null);
 }
 

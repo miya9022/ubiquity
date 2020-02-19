@@ -22,14 +22,14 @@ class DAOPreparedQueryAll extends DAOPreparedQuery {
 		parent::prepare ();
 	}
 
-	public function execute($params = [ ], $useCache = false) {
+	public function execute($params = [ ], $useCache = false, $dbInstance = null) {
 		$objects = array ();
 		$invertedJoinColumns = null;
 
 		$cp = $this->conditionParser;
 		$cp->setParams ( $params );
 		$className = $this->className;
-		$query = $this->db->prepareAndExecute ( $this->tableName, $this->preparedCondition, $this->fieldList, $cp->getParams (), $useCache );
+		$query = $this->db->prepareAndExecute ( $this->tableName, $this->preparedCondition, $this->fieldList, $cp->getParams (), $useCache, $dbInstance );
 		$oneToManyQueries = [ ];
 		$manyToOneQueries = [ ];
 		$manyToManyParsers = [ ];

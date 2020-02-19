@@ -28,10 +28,10 @@ class DAOPreparedQueryById extends DAOPreparedQuery {
 		$this->conditionParser->limitOne ();
 	}
 
-	public function execute($params = [ ], $useCache = false) {
+	public function execute($params = [ ], $useCache = false, $dbInstance = null) {
 		$cp = $this->conditionParser;
 		$cp->setKeyValues ( $params );
-		$query = $this->db->prepareAndExecute ( $this->tableName, $this->preparedCondition, $this->fieldList, $cp->getParams (), $useCache );
+		$query = $this->db->prepareAndExecute ( $this->tableName, $this->preparedCondition, $this->fieldList, $cp->getParams (), $useCache, $dbInstance );
 		if ($query && \sizeof ( $query ) > 0) {
 			$oneToManyQueries = [ ];
 			$manyToOneQueries = [ ];

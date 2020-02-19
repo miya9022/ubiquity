@@ -29,9 +29,9 @@ trait DAOPreparedTrait {
 		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryAll ( $className, $condition, $included );
 	}
 
-	public static function executePrepared($name, $params = [], $useCache = false) {
+	public static function executePrepared($name, $params = [ ], $useCache = false, $dbInstance = null) {
 		if (isset ( self::$preparedDAOQueries [$name] )) {
-			return self::$preparedDAOQueries [$name]->execute ( $params, $useCache );
+			return self::$preparedDAOQueries [$name]->execute ( $params, $useCache, $dbInstance );
 		}
 		return null;
 	}

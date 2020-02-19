@@ -74,9 +74,7 @@ class Database {
 		}
 		if ($pool && (\method_exists ( $this->wrapperObject, 'pool' ))) {
 			$this->wrapperObject->setPool ( $pool );
-			\var_dump ( $pool );
 		}
-		echo "Instanciate Db\n";
 	}
 
 	private function setDbWrapperClass($dbWrapperClass, $dbType) {

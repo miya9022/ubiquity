@@ -70,8 +70,9 @@ class PDOWrapper extends AbstractDbWrapper {
 		return false;
 	}
 
-	public function getStatement($sql) {
-		$st = $this->dbInstance->prepare ( $sql );
+	public function getStatement($sql, $dbInstance = null) {
+		$instance = $dbInstance ?? $this->dbInstance;
+		$st = $instance->prepare ( $sql );
 		$st->setFetchMode ( \PDO::FETCH_ASSOC );
 		return $st;
 	}
@@ -189,8 +190,8 @@ class PDOWrapper extends AbstractDbWrapper {
 		return $fieldsInfos;
 	}
 
-	public function _optPrepareAndExecute($sql, array $values = null) {
-		$statement = $this->_getStatement ( $sql );
+	public function _optPrepareAndExecute($sql, array $values = null, $dbInstance = null) {
+		$statement = $this->_getStatement ( $sql, $dbInstance );
 		$result = false;
 		if ($statement->execute ( $values )) {
 			$result = $statement->fetchAll ( \PDO::FETCH_ASSOC );
