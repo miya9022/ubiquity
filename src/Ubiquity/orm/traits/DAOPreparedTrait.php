@@ -18,15 +18,15 @@ use Ubiquity\db\Database;
 trait DAOPreparedTrait {
 	protected static $preparedDAOQueries = [ ];
 
-	public static function prepareGetById($name, $className, $included = false, ?Database $db) {
+	public static function prepareGetById($name, $className, $included = false, ?Database $db = null) {
 		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryById ( $className, $included, $db );
 	}
 
-	public static function prepareGetOne($name, $className, $condition = '', $included = false, ?Database $db) {
+	public static function prepareGetOne($name, $className, $condition = '', $included = false, ?Database $db = null) {
 		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryOne ( $className, $condition, $included, $db );
 	}
 
-	public static function prepareGetAll($name, $className, $condition = '', $included = false, ?Database $db) {
+	public static function prepareGetAll($name, $className, $condition = '', $included = false, ?Database $db = null) {
 		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryAll ( $className, $condition, $included, $db );
 	}
 
