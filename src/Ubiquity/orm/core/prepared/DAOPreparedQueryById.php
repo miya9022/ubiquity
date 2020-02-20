@@ -6,6 +6,7 @@ use Ubiquity\events\DAOEvents;
 use Ubiquity\events\EventsManager;
 use Ubiquity\orm\DAO;
 use Ubiquity\orm\OrmUtils;
+use Ubiquity\db\Database;
 
 /**
  * Ubiquity\orm\core\prepared$DAOPreparedQueryOne
@@ -17,8 +18,8 @@ use Ubiquity\orm\OrmUtils;
  */
 class DAOPreparedQueryById extends DAOPreparedQuery {
 
-	public function __construct($className, $included = false) {
-		parent::__construct ( $className, '', $included );
+	public function __construct($className, $included = false, ?Database $db = null) {
+		parent::__construct ( $className, '', $included, $db );
 	}
 
 	protected function prepare() {

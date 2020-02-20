@@ -2,7 +2,6 @@
 
 namespace Ubiquity\orm\traits;
 
-use Ubiquity\controllers\Startup;
 use Ubiquity\exceptions\DAOException;
 use Ubiquity\db\Database;
 

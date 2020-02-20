@@ -2,6 +2,8 @@
 
 namespace Ubiquity\orm\core\prepared;
 
+use Ubiquity\db\Database;
+
 /**
  * Ubiquity\orm\core\prepared$DAOPreparedQueryOne
  * This class is part of Ubiquity
@@ -12,8 +14,8 @@ namespace Ubiquity\orm\core\prepared;
  */
 class DAOPreparedQueryOne extends DAOPreparedQueryById {
 
-	public function __construct($className, $condition = '', $included = false) {
-		DAOPreparedQuery::__construct ( $className, $condition, $included );
+	public function __construct($className, $condition = '', $included = false, ?Database $db = null) {
+		DAOPreparedQuery::__construct ( $className, $condition, $included, $db );
 	}
 
 	protected function prepare() {
