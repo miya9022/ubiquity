@@ -4,6 +4,7 @@ namespace Ubiquity\orm\traits;
 
 use Ubiquity\controllers\Startup;
 use Ubiquity\exceptions\DAOException;
+use Ubiquity\db\Database;
 
 /**
  * Ubiquity\orm\traits$DAOPooling
@@ -20,60 +21,49 @@ trait DAOPooling {
 	abstract public static function startDatabase(&$config, $offset = null);
 
 	abstract public static function getDbOffset(&$config, $offset = null);
-	protected static $pool;
 
 	/**
-	 * Initialize pooling (To invoke during Swoole startup)
+	 * Create database pooling (To invoke during Swoole startup)
 	 *
 	 * @param array $config
 	 * @param ?string $offset
 	 * @param int $size
-	 * @param callable $onDbStarted
 	 */
-	public static function initPooling(&$config, $offset = null, int $size = 16, $onDbStarted = null) {
+	public static function createDbPool(&$config, $offset = null, int $size = 16) {
 		$dbConfig = self::getDbOffset ( $config, $offset );
 		$wrapperClass = $dbConfig ['wrapper'] ?? \Ubiquity\db\providers\pdo\PDOWrapper::class;
 		if (\method_exists ( $wrapperClass, 'getPoolClass' )) {
 			$poolClass = \call_user_func ( $wrapperClass . '::getPoolClass' );
 			if (\class_exists ( $poolClass, true )) {
 				$reflection_class = new \ReflectionClass ( $poolClass );
-				self::$pool = $reflection_class->newInstanceArgs ( [ &$config,$offset,$size ] );
+				$pool = $reflection_class->newInstanceArgs ( [ &$config,$offset,$size ] );
+				$db = self::startDatabase ( $config, $offset );
+				$db->setPool ( $pool );
+				return $db;
 			} else {
 				throw new DAOException ( $poolClass . ' class does not exists!' );
 			}
 		} else {
 			throw new DAOException ( $wrapperClass . ' does not support connection pooling!' );
 		}
-		self::startDatabase ( $config, $offset );
-		if (\is_callable ( $onDbStarted )) {
-			$onDbStarted ();
-		}
+	}
+
+	public static function initPool(Database $db) {
+		$db->initPool ();
 	}
 
 	/**
 	 * gets a new DbConnection from pool
 	 *
-	 * @param string $offset
+	 * @param Database $db
 	 * @return mixed
 	 */
-	public static function pool($offset = 'default') {
-		if (! isset ( self::$db [$offset] )) {
-			self::startDatabase ( Startup::$config, $offset );
-		}
-		return self::$db [$offset]->pool ();
+	public static function pool(Database $db) {
+		return $db->pool ();
 	}
 
-	public static function freePool($db) {
-		self::$pool->put ( $db );
-	}
-
-	public static function go($asyncCallable, $offset = 'default') {
-		$vars = \get_defined_vars ();
-		\Swoole\Coroutine::create ( function () use ($vars, $asyncCallable, $offset) {
-			$db = self::pool ( $offset );
-			\call_user_func_array ( $asyncCallable, $vars );
-			self::freePool ( $db );
-		} );
+	public static function freePool(Database $db, $dbInstance) {
+		$db->freePool ( $dbInstance );
 	}
 }
 

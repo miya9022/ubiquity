@@ -172,9 +172,10 @@ class DAO {
 	 * @param boolean $cache
 	 */
 	public static function connect($offset, $wrapper, $dbType, $dbName, $serverName = '127.0.0.1', $port = '3306', $user = 'root', $password = '', $options = [ ], $cache = false) {
-		self::$db [$offset] = new Database ( $wrapper, $dbType, $dbName, $serverName, $port, $user, $password, $options, $cache, self::$pool );
+		self::$db [$offset] = new Database ( $wrapper, $dbType, $dbName, $serverName, $port, $user, $password, $options, $cache );
 		try {
 			self::$db [$offset]->connect ();
+			return self::$db [$offset];
 		} catch ( \Exception $e ) {
 			Logger::error ( "DAO", $e->getMessage () );
 			throw new DAOException ( $e->getMessage (), $e->getCode (), $e->getPrevious () );
@@ -189,7 +190,7 @@ class DAO {
 	public static function startDatabase(&$config, $offset = null) {
 		$db = $offset ? ($config ['database'] [$offset] ?? ($config ['database'] ?? [ ])) : ($config ['database'] ['default'] ?? $config ['database']);
 		if ($db ['dbName'] !== '') {
-			self::connect ( $offset ?? 'default', $db ['wrapper'] ?? \Ubiquity\db\providers\pdo\PDOWrapper::class, $db ['type'], $db ['dbName'], $db ['serverName'] ?? '127.0.0.1', $db ['port'] ?? 3306, $db ['user'] ?? 'root', $db ['password'] ?? '', $db ['options'] ?? [ ], $db ['cache'] ?? false);
+			return self::connect ( $offset ?? 'default', $db ['wrapper'] ?? \Ubiquity\db\providers\pdo\PDOWrapper::class, $db ['type'], $db ['dbName'], $db ['serverName'] ?? '127.0.0.1', $db ['port'] ?? 3306, $db ['user'] ?? 'root', $db ['password'] ?? '', $db ['options'] ?? [ ], $db ['cache'] ?? false);
 		}
 	}
 

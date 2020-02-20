@@ -53,7 +53,7 @@ class Database {
 	 * @param boolean|string $cache
 	 * @param mixed $pool
 	 */
-	public function __construct($dbWrapperClass, $dbType, $dbName, $serverName = "127.0.0.1", $port = "3306", $user = "root", $password = "", $options = [ ], $cache = false, $pool = null) {
+	public function __construct($dbWrapperClass, $dbType, $dbName, $serverName = "127.0.0.1", $port = "3306", $user = "root", $password = "", $options = [ ], $cache = false) {
 		$this->setDbWrapperClass ( $dbWrapperClass, $dbType );
 		$this->dbName = $dbName;
 		$this->serverName = $serverName;
@@ -71,9 +71,6 @@ class Database {
 					throw new CacheException ( $cache . " is not a valid value for database cache" );
 				}
 			}
-		}
-		if ($pool && (\method_exists ( $this->wrapperObject, 'pool' ))) {
-			$this->wrapperObject->setPool ( $pool );
 		}
 	}
 
@@ -277,7 +274,13 @@ class Database {
 	}
 
 	public function setPool($pool) {
-		$this->wrapperObject->setPool ( $pool );
+		if ($pool && (\method_exists ( $this->wrapperObject, 'pool' ))) {
+			$this->wrapperObject->setPool ( $pool );
+		}
+	}
+
+	public function initPool() {
+		$this->wrapperObject->initPool ();
 	}
 
 	public static function getAvailableWrappers() {
