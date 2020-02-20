@@ -6,6 +6,7 @@ use Ubiquity\db\SqlUtils;
 use Ubiquity\orm\DAO;
 use Ubiquity\orm\OrmUtils;
 use Ubiquity\orm\parser\ConditionParser;
+use Ubiquity\db\Database;
 
 /**
  * Ubiquity\orm\core\prepared$DAOPreparedQuery
@@ -44,11 +45,12 @@ abstract class DAOPreparedQuery {
 	 */
 	protected $db;
 
-	public function __construct($className, $condition = null, $included = false) {
+	public function __construct($className, $condition = null, $included = false, ?Database $db = null) {
 		$this->className = $className;
 		$this->included = $included;
 		$this->condition = $condition;
 		$this->conditionParser = new ConditionParser ( $condition );
+		$this->db = $db;
 		$this->prepare ();
 		$this->preparedCondition = SqlUtils::checkWhere ( $this->conditionParser->getCondition () );
 	}
@@ -166,7 +168,7 @@ abstract class DAOPreparedQuery {
 	}
 
 	protected function prepare() {
-		$this->db = DAO::getDb ( $this->className );
+		$this->db ??= DAO::getDb ( $this->className );
 		$this->included = DAO::_getIncludedForStep ( $this->included );
 
 		$metaDatas = OrmUtils::getModelMetadata ( $this->className );

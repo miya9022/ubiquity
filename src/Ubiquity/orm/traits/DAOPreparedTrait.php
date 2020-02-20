@@ -5,6 +5,7 @@ namespace Ubiquity\orm\traits;
 use Ubiquity\orm\core\prepared\DAOPreparedQueryOne;
 use Ubiquity\orm\core\prepared\DAOPreparedQueryById;
 use Ubiquity\orm\core\prepared\DAOPreparedQueryAll;
+use Ubiquity\db\Database;
 
 /**
  * Ubiquity\orm\traits$DAOPreparedTrait
@@ -17,16 +18,16 @@ use Ubiquity\orm\core\prepared\DAOPreparedQueryAll;
 trait DAOPreparedTrait {
 	protected static $preparedDAOQueries = [ ];
 
-	public static function prepareGetById($name, $className, $included = false) {
-		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryById ( $className, $included );
+	public static function prepareGetById($name, $className, $included = false, ?Database $db) {
+		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryById ( $className, $included, $db );
 	}
 
-	public static function prepareGetOne($name, $className, $condition = '', $included = false) {
-		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryOne ( $className, $condition, $included );
+	public static function prepareGetOne($name, $className, $condition = '', $included = false, ?Database $db) {
+		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryOne ( $className, $condition, $included, $db );
 	}
 
-	public static function prepareGetAll($name, $className, $condition = '', $included = false) {
-		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryAll ( $className, $condition, $included );
+	public static function prepareGetAll($name, $className, $condition = '', $included = false, ?Database $db) {
+		return self::$preparedDAOQueries [$name] = new DAOPreparedQueryAll ( $className, $condition, $included, $db );
 	}
 
 	public static function executePrepared($name, $params = [ ], $useCache = false, $dbInstance = null) {
