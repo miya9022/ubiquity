@@ -1,7 +1,8 @@
 {
-	"name" : "phpmv/ubiquity",
+	"name" : "mangotech/ubiquity",
 	"description" : "Ubiquity-framework",
 	"type" : "framework",
+	"homepage": "https://github.com/miya9022/ubiquity",
 	"keywords" : [
 		"php",
 		"framework",
@@ -9,8 +10,10 @@
 		"orm"
 	],
 	"require" : {
-		"php" : ">7.0"
+		"php" : ">7.0",
+		"elendev/nexus-composer-push": "^0.1.3"
 	},
+	"bin": ["satis/bin/satis"],
 	"license" : "Apache-2.0",
 	"authors" : [{
 			"name" : "Jean-Christophe HERON",
@@ -20,12 +23,18 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"Ubiquity@mangotech\\" : "src/Ubiquity/"
+			"Ubiquity\\" : "src/Ubiquity/"
 		}
 	},
 	"extra" : {
 		"branch-alias" : {
 			"dev-master" : "2.4.x-dev"
+		},
+		"nexus-push": {
+			"url": "http://192.168.2.252:8081/repository/composer/",
+			"username": "admin",
+			"password": "mangotech2019",
+			"ignore-by-git-attributes": true
 		}
 	},
 	"require-dev" : {
@@ -40,7 +49,7 @@
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "http://192.168.2.252:8081/repository/composer-proxy/"
+			"url": "http://192.168.2.252:8081/repository/composer-group/"
 		},
 		{
 			"packagist.org": false

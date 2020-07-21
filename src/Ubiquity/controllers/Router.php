@@ -136,6 +136,7 @@ class Router {
 	public static function getRouteByName($name, $parameters = [], $absolute = true) {
 		foreach ( self::$routes as $routePath => $routeDetails ) {
 			if (self::checkRouteName ( $routeDetails, $name )) {
+        $routePath = str_replace('\\','',$routePath);
 				if (\sizeof ( $parameters ) > 0)
 					$routePath = self::_getURL ( $routePath, $parameters );
 				if (! $absolute)

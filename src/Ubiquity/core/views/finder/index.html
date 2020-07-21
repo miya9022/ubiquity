@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload file</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    .main {
+      display: block;
+      text-align: center;
+      max-width: 100%;
+      margin: 0 auto;
+      padding-top: 50px;
+    }
+    
+    .main:after, .main:before {
+      display: table;
+      clear: both;
+    }
+    
+    .upload {
+      position: relative;
+      width: 70%;
+      margin: 0 auto;
+    }
+    
+    .inputfile {
+      display: none;
+    }
+    
+    .button {
+      cursor: pointer;
+    }
+    
+    .file-box {
+      display: inline-block;
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      padding: 5px 0px 5px 5px;
+      box-sizing: border-box;
+      height: 36px;
+      text-align: left;
+    }
+    
+    .file-button {
+      background-color: #455A64;
+      border-color: #455A64;
+      color: #fff;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      padding: 6px 10px;
+      display: inline-flex;
+    }
+    
+    .file-button span {
+      line-height: 1.5;
+    }
+    
+    .clear {
+      display: table;
+      clear: both;
+    }
+    
+    .left {
+      position: relative;
+      margin-right: 130px;
+    }
+    
+    .right {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    
+    .upload-file {
+      display: inline-flex;
+      background: #009688;
+      color: #fff;
+      border: transparent;
+      outline: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    
+    .upload-file span {
+      margin-left: 5px;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+<div class="main">
+  <div class="upload">
+    <form action="{{ action }}" method="post" enctype="multipart/form-data">
+      <div class="left">
+        <input type="hidden" name="nameMedia" value="{{name}}">
+        <input type="file" id="file" name="file" class="inputfile" onchange='selectFile(this)' accept="{{ type }}"
+               required>
+        <label for="file" class="button">
+          <span id="file-name" class="file-box"></span>
+          <span class="file-button">
+            {% if iconType == 'file' %}
+              <i class="material-icons">attach_file</i>
+            {% elseif iconType == 'image' %}
+            <i class="material-icons">insert_photo</i>
+           {% elseif iconType == 'video' %}
+            <i class="material-icons">movie</i>
+           {% elseif iconType == 'audio' %}
+            <i class="material-icons">queue_music</i>
+            {% else %}
+             <i class="material-icons">wallpaper</i>
+            {% endif %}
+            <span>Select File</span>
+        </span>
+        </label>
+      </div>
+      <div class="right">
+        <button type="submit" class="upload-file" onclick="uploadFile(this)"><i class="material-icons">cloud_upload</i>
+          <span>Upload file</span></button>
+      </div>
+    </form>
+    <br class="clear">
+  </div>
+  <div class="listFile">
+    <input type="hidden" value="{{ name }}" id="name_control">
+    <hr>
+    {% if url %}
+    <img width="200px" ondblclick="selectImage(this)" src="{{ url }}" style="cursor: pointer">
+    {% endif %}
+  </div>
+</div>
+<script>
+    function selectFile(target) {
+        document.getElementById("file-name").innerHTML = target.files[0].name;
+    }
+
+    function selectImage(target) {
+        var name = document.getElementById('name_control').value;
+        var inputData = window.opener.document.getElementsByName(name)[0];
+        inputData.value = '{{url}}';
+        inputData.parentElement.getElementsByClassName("mgt-img")[0].setAttribute('src', '{{ url }}');
+        window.opener.document.getElementsByName(name + "_type")[0].value = '{{ fileType }}';
+        window.close();
+    }
+</script>
+</body>
+</html>
